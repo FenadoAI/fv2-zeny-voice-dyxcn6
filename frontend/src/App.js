@@ -2,8 +2,10 @@ import { useEffect } from "react";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import axios from "axios";
+import ZenyDashboard from "./components/ZenyDashboard";
+import AvatarChat from "./components/AvatarChat";
 
-const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:8001';
 const API = `${API_BASE}/api`;
 
 const Home = () => {
@@ -20,31 +22,16 @@ const Home = () => {
     helloWorldApi();
   }, []);
 
-  return (
-    <div>
-      <header className="App-header">
-        <a
-          className="App-link"
-          href="https://fenado.ai"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img src="https://fenado.ai/fenado-logo.png" className="w-32 h-32 rounded-lg cursor-pointer" alt="Fenado Logo" />
-        </a>
-        <p className="mt-5">Your AI-powered app will appear here</p>
-      </header>
-    </div>
-  );
+  return <ZenyDashboard />;
 };
 
 function App() {
   return (
-    <div className="App">
+    <div className="App min-h-screen bg-gray-50">
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home />}>
-            <Route index element={<Home />} />
-          </Route>
+          <Route path="/" element={<Home />} />
+          <Route path="/chat/:avatarId" element={<AvatarChat />} />
         </Routes>
       </BrowserRouter>
     </div>
