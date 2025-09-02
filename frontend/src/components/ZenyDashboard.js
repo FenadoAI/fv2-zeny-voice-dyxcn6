@@ -7,21 +7,20 @@ import { Textarea } from './ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Badge } from './ui/badge';
-import { Plus, MessageCircle, TrendingUp, Users } from 'lucide-react';
+import { Plus, MessageCircle, TrendingUp, Users, LogOut, User } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:8001';
 const API = `${API_BASE}/api`;
 
-const ZenyDashboard = () => {
+const ZenyDashboard = ({ user, onLogout }) => {
   const [avatars, setAvatars] = useState([]);
   const [summaries, setSummaries] = useState([]);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [newAvatar, setNewAvatar] = useState({
     name: '',
     personality: '',
-    description: '',
-    owner_id: 'user-123' // Mock user ID
+    description: ''
   });
   const navigate = useNavigate();
 
@@ -51,7 +50,7 @@ const ZenyDashboard = () => {
   const createAvatar = async () => {
     try {
       await axios.post(`${API}/avatars`, newAvatar);
-      setNewAvatar({ name: '', personality: '', description: '', owner_id: 'user-123' });
+      setNewAvatar({ name: '', personality: '', description: '' });
       setShowCreateDialog(false);
       fetchAvatars();
     } catch (error) {
@@ -67,9 +66,22 @@ const ZenyDashboard = () => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Zeny AI Dashboard</h1>
-          <p className="text-gray-600 text-lg">Manage your AI avatars and monitor conversations</p>
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <h1 className="text-4xl font-bold text-gray-900 mb-2">Zeny AI Dashboard</h1>
+            <p className="text-gray-600 text-lg">Manage your AI avatars and monitor conversations</p>
+          </div>
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 text-gray-600">
+              <User className="w-4 h-4" />
+              <span>{user?.username}</span>
+              {user?.is_admin && <Badge variant="destructive">Admin</Badge>}
+            </div>
+            <Button onClick={onLogout} variant="outline" size="sm">
+              <LogOut className="w-4 h-4 mr-2" />
+              Logout
+            </Button>
+          </div>
         </div>
 
         {/* Stats Cards */}

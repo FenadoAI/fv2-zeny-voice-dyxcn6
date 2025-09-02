@@ -6,12 +6,12 @@ import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Badge } from './ui/badge';
-import { ArrowLeft, Send, FileText, User, Bot } from 'lucide-react';
+import { ArrowLeft, Send, FileText, User, Bot, LogOut } from 'lucide-react';
 
 const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:8001';
 const API = `${API_BASE}/api`;
 
-const AvatarChat = () => {
+const AvatarChat = ({ user, onLogout }) => {
   const { avatarId } = useParams();
   const navigate = useNavigate();
   const [avatar, setAvatar] = useState(null);
@@ -146,17 +146,27 @@ const AvatarChat = () => {
               <Badge variant="secondary">{avatar.personality}</Badge>
             </div>
           </div>
-          {chatStarted && conversation && (
-            <div className="space-x-2">
-              <Button onClick={generateSummary} variant="outline">
-                <FileText className="w-4 h-4 mr-2" />
-                Generate Summary
-              </Button>
-              <Button onClick={endConversation} variant="destructive">
-                End Chat
-              </Button>
+          <div className="flex items-center space-x-2">
+            {chatStarted && conversation && (
+              <>
+                <Button onClick={generateSummary} variant="outline">
+                  <FileText className="w-4 h-4 mr-2" />
+                  Generate Summary
+                </Button>
+                <Button onClick={endConversation} variant="destructive">
+                  End Chat
+                </Button>
+              </>
+            )}
+            <div className="flex items-center space-x-2 text-gray-600 ml-4">
+              <User className="w-4 h-4" />
+              <span>{user?.username}</span>
             </div>
-          )}
+            <Button onClick={onLogout} variant="outline" size="sm">
+              <LogOut className="w-4 h-4 mr-2" />
+              Logout
+            </Button>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
